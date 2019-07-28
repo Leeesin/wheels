@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible"
+        content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'></div>
+</body>
+<script type="module">
+  import Vnode from "./Vnode.js";
+  import patch from "./patch.js";
+
+  const oldTree = new Vnode('ul', {
+    id: 'oldTree',
+  }, [
+      'oldTree',
+      new Vnode('li', { id: 'oldTree-child-1', }, ['oldTree-li-1']),
+      new Vnode('li', { id: 'oldTree-child-2', }, ['oldTree-li-2']),
+    ]
+  )
+
+
+  const newTree = new Vnode('ul', {
+    id: 'newTree',
+  }, [
+      new Vnode('li', { id: 'newTree-child-1', }, ['newTree-li-1']),
+      new Vnode('li', { id: 'newTree-child-2', }, ['newTree-li-2']),
+      new Vnode('li', { id: 'newTree-child-2', }, ['newTree-li-3']),
+    ]
+  )
+
+  const oldTreeEl = oldTree.render()//真实节点
+  document.getElementById('app').appendChild(oldTreeEl)
+
+  patch(oldTreeEl, oldTree, newTree)
+  
+</script>
+
+</html>
