@@ -12,6 +12,8 @@
 
 <body>
   <div id='app'></div>
+
+  
 </body>
 <script type="module">
   import Vnode from "./Vnode.js";
@@ -19,16 +21,18 @@
 
   const oldTree = new Vnode('ul', {
     id: 'oldTree',
+    class: 'oldTree-ul'
   }, [
-      'oldTree',
-      new Vnode('li', { id: 'oldTree-child-1', }, ['oldTree-li-1']),
-      new Vnode('li', { id: 'oldTree-child-2', }, ['oldTree-li-2']),
+      // new Vnode('li', { id: 'oldTree-child-1', }, ['oldTree-li-1']),
+      // new Vnode('li', { id: 'oldTree-child-2', }, ['oldTree-li-2']),
+      // new Vnode('li', { id: 'oldTree-child-3', }, ['oldTree-li-3']),
     ]
   )
-
+  console.log('oldTree 的值是：', oldTree);
 
   const newTree = new Vnode('ul', {
     id: 'newTree',
+    style: { color: 'red' }
   }, [
       new Vnode('li', { id: 'newTree-child-1', }, ['newTree-li-1']),
       new Vnode('li', { id: 'newTree-child-2', }, ['newTree-li-2']),
@@ -39,8 +43,11 @@
   const oldTreeEl = oldTree.render()//真实节点
   document.getElementById('app').appendChild(oldTreeEl)
 
-  patch(oldTreeEl, oldTree, newTree)
-  
+  const res = patch(oldTreeEl, oldTree, newTree)
+
+  console.log('res 的值是：', res);
+
+
 </script>
 
 </html>

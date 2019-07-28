@@ -24,6 +24,8 @@ class Vnode {
         : document.createTextNode(child) // 如果字符串，只构建文本节点
       el.appendChild(childEl)
     })
+    this.el = el
+    this.el.vnode = this
     return el
   }
 
