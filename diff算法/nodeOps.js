@@ -1,7 +1,6 @@
-export function appendChildren(parentEl, childVnodes) {
-  parentEl.vnode.children = [...childVnodes]
+export function appendChildren(parentElm, childVnodes) {
   childVnodes.forEach(childVnode => {
-    parentEl.appendChild(childVnode.render())
+    parentElm.appendChild(childVnode.render())
   });
 
 
@@ -9,11 +8,25 @@ export function appendChildren(parentEl, childVnodes) {
 
 //移除 所有子 virtual node   和 所有子 真实 node
 export function removeChildren(parentVnode) {
-  const parentEl = parentVnode.el
+  const parentElm = parentVnode.elm
   parentVnode.children = []
-  const childNodes = Array.from(parentEl.childNodes)
+  const childNodes = Array.from(parentElm.childNodes)
   for (const child of childNodes) {
-    parentEl.removeChild(child)
+    parentElm.removeChild(child)
   }
 }
 
+export function insertBefore(parentElm, newItem, existingItem) {
+  parentElm.insertBefore(newItem, existingItem)
+}
+
+
+export function insertAfter(newEl, targetEl) {
+  const parentEl = targetEl.parentNode;
+
+  if (parentEl.lastChild == targetEl) {
+    parentEl.appendChild(newEl);
+  } else {
+    parentEl.insertBefore(newEl, targetEl.nextSibling);
+  }
+}

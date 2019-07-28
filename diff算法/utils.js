@@ -39,11 +39,4 @@ function setAttr(node, key, value) {
   }
 }
 
-function removeNode(el) {
-  const parent = el.parentNode;
-  if (parent) {
-    removeChild(parent, el);
-  }
-}
-
 export { each, setAttr, nodeOps }

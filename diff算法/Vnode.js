@@ -1,5 +1,3 @@
-// const mount = require('./mount')
-
 class Vnode {
   constructor(tag = '', attr = {}, children = []) {
     this.tag = tag
@@ -8,12 +6,12 @@ class Vnode {
   }
 
   render() {
-    const el = document.createElement(this.tag) // 根据tagName构建
+    const elm = document.createElement(this.tag) // 根据tagName构建
     const attr = this.attr
 
     Object.keys(attr).forEach(propName => {
       const propValue = attr[propName]
-      el.setAttribute(propName, propValue)
+      elm.setAttribute(propName, propValue)
     })
 
     const children = this.children || []
@@ -22,11 +20,11 @@ class Vnode {
       var childEl = (child instanceof Vnode)
         ? child.render() // 如果子节点也是虚拟DOM，递归构建DOM节点
         : document.createTextNode(child) // 如果字符串，只构建文本节点
-      el.appendChild(childEl)
+      elm.appendChild(childEl)
     })
-    this.el = el
-    this.el.vnode = this
-    return el
+    this.elm = elm
+    this.elm.vnode = this
+    return elm
   }
 
 }
