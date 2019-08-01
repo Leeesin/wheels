@@ -17,9 +17,17 @@ class Vnode {
     const children = this.children || []
 
     children.forEach(function (child) {
-      var childEl = (child instanceof Vnode)
-        ? child.render() // 如果子节点也是虚拟DOM，递归构建DOM节点
-        : document.createTextNode(child) // 如果字符串，只构建文本节点
+      if (child instanceof Vnode) {
+        child.render() // 如果子节点也是虚拟DOM，递归构建DOM节点
+      } else { // 如果字符串，只构建文本节点
+        const elm = document.createTextNode(child)
+        console.log('elm22222 的值是：', typeof elm);
+        child.elm = elm
+        child.elm.vnode = elm
+      }
+      // const childEl = (child instanceof Vnode)
+      //   ? child.render() // 如果子节点也是虚拟DOM，递归构建DOM节点
+      //   : document.createTextNode(child) // 如果字符串，只构建文本节点
       elm.appendChild(childEl)
     })
     this.elm = elm

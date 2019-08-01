@@ -1,8 +1,22 @@
-import { each, setAttr, nodeOps } from "./utils.js";
+import { each, setAttr, nodeOps, isUndef, isDef } from "./utils.js";
+import patchAttr from "./patchAttr.js";
 
 function patchVnode(parentElm, oldVnode, newVnode) {
-  patchAttr(parentElm, oldVnode.attr, newVnode.attr)
-  if (oldVnode.children.length) {
+  if (isUndef(parentElm)) { //elm不存在 则为文本节点
+
+  }
+
+  if (typeof newVnode == 'string') {
+    console.log("TCL: patchVnode -> oldVnode", typeof newVnode)
+    console.log('parentElm 的值是：', parentElm);
+    parentElm.textContent = newVnode
+    return
+  }
+
+
+  patchAttr(oldVnode.attr, newVnode.attr, parentElm)
+
+  if (oldVnode.children && oldVnode.children.length) {
     if (!newVnode.children.length) {//移除  所有子节点
       nodeOps.removeChildren(oldVnode)
     } else {
@@ -11,27 +25,12 @@ function patchVnode(parentElm, oldVnode, newVnode) {
 
   } else {//旧树没有子节点,
     // 新树有子节点， 则 appendChild
-    newVnode.children.length &&
+    newVnode.children && newVnode.children.length &&
       nodeOps.appendChildren(parentElm, newVnode.children)
   }
 
   return parentElm
 
-}
-
-function patchAttr(parentElm, oldTreeAttr = {}, newTreeAttr = {}) {
-  each(oldTreeAttr, (key, val) => { //遍历  oldTreeAttr 看newTreeAttr 是否还有对应的属性
-    if (newTreeAttr[key]) {
-      val !== newTreeAttr[key] && setAttr(parentElm, key, newTreeAttr[key])
-    }
-    else {
-      parentElm.removeAttribute(key)
-    }
-  })
-
-  each(newTreeAttr, (key, val) => {//看 oldTreeAttr 是否还有对应的属性，没有就新增 
-    !oldTreeAttr[key] && setAttr(parentElm, key, val)
-  })
 }
 
 function updateChildren(parentElm, oldCh, newCh) {
@@ -54,30 +53,30 @@ function updateChildren(parentElm, oldCh, newCh) {
     }
 
     else if (sameVnode(oldStartVnode, newStartVnode)) { //旧首 和 新首相同
-      patchVnode(oldStartVnode, newStartVnode);
+      patchVnode(oldStartVnode.elm, oldStartVnode, newStartVnode);
       oldStartVnode = oldCh[++oldStartIdx];
       newStartVnode = newCh[++newStartIdx];
     }
 
-    else if (sameVnode(oldEndVnode, newEndVnode)) { //旧尾 和 新尾相同
-      patchVnode(oldEndVnode, newEndVnode);
-      oldEndVnode = oldCh[--oldEndIdx];
-      newEndVnode = newCh[--newEndIdx];
-    }
+    // else if (sameVnode(oldEndVnode, newEndVnode)) { //旧尾 和 新尾相同
+    //   patchVnode(oldEndVnode.elm, oldEndVnode, newEndVnode);
+    //   oldEndVnode = oldCh[--oldEndIdx];
+    //   newEndVnode = newCh[--newEndIdx];
+    // }
 
-    else if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首移动到 最后面
-      patchVnode(oldStartVnode, newEndVnode);
-      nodeOps.insertBefore(parentElm, oldStartVnode.elm, oldEndVnode.elm.nextSibling)//将 旧首 移动到最后一个节点后面
-      oldStartVnode = oldCh[++oldStartIdx];
-      newEndVnode = newCh[--newEndIdx];
-    }
+    // else if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首移动到 最后面
+    //   patchVnode(oldStartVnode.elm, oldStartVnode, newEndVnode);
+    //   nodeOps.insertBefore(parentElm, oldStartVnode.elm, oldEndVnode.elm.nextSibling)//将 旧首 移动到最后一个节点后面
+    //   oldStartVnode = oldCh[++oldStartIdx];
+    //   newEndVnode = newCh[--newEndIdx];
+    // }
 
-    else if (sameVnode(oldEndVnode, newStartVnode)) {//旧尾 和 新首相同 ,将 旧尾 移动到 最前面
-      patchVnode(oldEndVnode, newStartVnode);
-      nodeOps.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm);
-      oldEndVnode = oldCh[--oldEndIdx];
-      newStartVnode = newCh[++newStartIdx];
-    }
+    // else if (sameVnode(oldEndVnode, newStartVnode)) {//旧尾 和 新首相同 ,将 旧尾 移动到 最前面
+    //   patchVnode(oldEndVnode.elm, oldEndVnode, newStartVnode);
+    //   nodeOps.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm);
+    //   oldEndVnode = oldCh[--oldEndIdx];
+    //   newStartVnode = newCh[++newStartIdx];
+    // }
 
   }
 
@@ -88,7 +87,7 @@ function sameVnode(a, b) {
   return a.key === b.key && a.tag === b.tag
 }
 
-export default function patch(parentElm, oldVnode, newVnode) {
-  patchVnode(parentElm, oldVnode, newVnode)
-  parentElm.vnode = newVnode//patch 更新完成真实dom后, 重置 parentElm.vnode
+export default function patch(oldVnode, vnode, parentElm) {
+  patchVnode(parentElm, oldVnode, vnode)
+  parentElm.vnode = vnode//patch 更新完成真实dom后, 重置 parentElm.vnode
 }

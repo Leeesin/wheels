@@ -11,6 +11,7 @@
 </head>
 
 <body>
+  
   <div id='app'></div>
 
 
@@ -23,9 +24,9 @@
     id: 'oldTree',
     class: 'oldTree-ul'
   }, [
-      // new Vnode('li', { id: 'oldTree-child-1', }, ['oldTree-li-1']),
-      // new Vnode('li', { id: 'oldTree-child-2', }, ['oldTree-li-2']),
-      // new Vnode('li', { id: 'oldTree-child-3', }, ['oldTree-li-3']),
+      new Vnode('li', { id: 'oldTree-child-1', }, ['oldTree-li-1']),
+      new Vnode('li', { id: 'oldTree-child-2', }, ['oldTree-li-2']),
+      new Vnode('li', { id: 'oldTree-child-3', }, ['oldTree-li-3']),
     ]
   )
   console.log('oldTree 的值是：', oldTree);
@@ -42,8 +43,8 @@
 
   const oldTreeEl = oldTree.render()//真实节点
   document.getElementById('app').appendChild(oldTreeEl)
+  const res = patch(oldTree, newTree, oldTreeEl)
 
-  const res = patch(oldTreeEl, oldTree, newTree)
 
   console.log('oldTreeEl.vnode 的值是：', oldTreeEl.vnode);
 

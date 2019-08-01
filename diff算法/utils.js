@@ -39,4 +39,12 @@ function setAttr(node, key, value) {
   }
 }
 
-export { each, setAttr, nodeOps }
+function isUndef(v) {
+  return v === undefined || v === null
+}
+
+function isDef(v) {
+  return v !== undefined || v !== null
+}
+
+export { each, setAttr, isUndef, isDef, nodeOps }
