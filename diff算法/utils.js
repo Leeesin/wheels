@@ -47,4 +47,14 @@ function isDef(v) {
   return v !== undefined || v !== null
 }
 
-export { each, setAttr, isUndef, isDef, nodeOps }
+function createKeyToOldIdx(children, beginIdx, endIdx) {
+  let i, key
+  const map = {}
+  for (i = beginIdx; i <= endIdx; ++i) {
+    key = children[i].key
+    if (isDef(key)) map[key] = i
+  }
+  return map
+}
+
+export { each, setAttr, isUndef, isDef, nodeOps, createKeyToOldIdx }

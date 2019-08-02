@@ -37,7 +37,7 @@
   }, [
       new Vnode('li', { id: 'newTree-child-1', }, [new Vnode(undefined, undefined, [], 'newTree-li-1')]),
       new Vnode('li', { id: 'newTree-child-2', }, [new Vnode(undefined, undefined, [], 'newTree-li-2')]),
-      new Vnode('li', { id: 'newTree-child-2', }, [new Vnode(undefined, undefined, [], 'newTree-li-3')]),
+      new Vnode('li', { id: 'newTree-child-2', style: { color: 'blue' } }, [new Vnode(undefined, undefined, [], 'newTree-li-3')]),
     ]
   )
 
@@ -46,7 +46,6 @@
   setTimeout(() => {
     const res = patch(oldTree, newTree, oldTreeEl)
   }, 2000);
-
   console.log('oldTreeEl.vnode 的值是：', oldTreeEl.vnode);
 
 </script>
