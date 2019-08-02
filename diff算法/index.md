@@ -54,3 +54,66 @@ function diff(vnode,newVnode){
   diffChildren(vnode.children,newVnode.children)
 }
 ``` 
+## diffAttr
+```js
+function diffAttr(oldVnode = {}, vnode = {}, parentElm) {
+  each(oldVnode, (key, val) => { //遍历  oldVnode 看newTreeAttr 是否还有对应的属性
+    if (vnode[key]) {
+      val !== vnode[key] && setAttr(parentElm, key, vnode[key])
+    }
+    else {
+      parentElm.removeAttribute(key)
+    }
+  })
+
+  each(vnode, (key, val) => {//看 oldVnode 是否还有对应的属性，没有就新增 
+    !oldVnode[key] && setAttr(parentElm, key, val)
+  })
+}
+
+function each(obj, fn) {//遍历对象
+  if (Object.prototype.toString.call(obj) !== '[object Object]') {
+    console.error('只能遍历对象！')
+    return
+  }
+
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      var val = obj[key];
+      fn(key, val)
+    }
+  }
+}
+
+function setAttr(node, key, value) {
+  switch (key) {
+    case 'style':
+      each(value, (key, val) => {
+        node.style[key] = val
+      })
+      break
+    case 'value':
+      var tag = node.tag || ''
+      tag = tag.toLowerCase()
+      if (
+        tag === 'input' || tag === 'textarea'
+      ) {
+        node.value = value
+      } else {
+        // if it is not a input or textarea, use `setAttribute` to set
+        node.setAttribute(key, value)
+      }
+      break
+    default:
+      node.setAttribute(key, value)
+      break
+  }
+}
+```
+> 该函数主要做了两件事
+1. 遍历  oldVnode 看 newTreeAttr 是否还有对应的属性
+   - 如果有并且不相等的，修改对应的属性， 
+   - 没有的话，直接删除对应的属性
+2. 遍历oldVnode, 是否还有对应的属性，没有就新增 
+
+## diffChildren

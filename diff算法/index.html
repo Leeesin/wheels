@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  
+
   <div id='app'></div>
 
 
@@ -22,29 +22,30 @@
 
   const oldTree = new Vnode('ul', {
     id: 'oldTree',
-    class: 'oldTree-ul'
+    class: 'oldTree-ul',
+    style: { color: 'blue' }
   }, [
-      new Vnode('li', { id: 'oldTree-child-1', }, ['oldTree-li-1']),
-      new Vnode('li', { id: 'oldTree-child-2', }, ['oldTree-li-2']),
-      new Vnode('li', { id: 'oldTree-child-3', }, ['oldTree-li-3']),
+      new Vnode('li', { id: 'oldTree-child-1', }, [new Vnode(undefined, undefined, [], 'oldTree-li-1')]),
+      new Vnode('li', { id: 'oldTree-child-2', }, [new Vnode(undefined, undefined, [], 'oldTree-li-2')]),
+      new Vnode('li', { id: 'oldTree-child-3', }, [new Vnode(undefined, undefined, [], 'oldTree-li-3')]),
     ]
   )
-  console.log('oldTree 的值是：', oldTree);
 
   const newTree = new Vnode('ul', {
     id: 'newTree',
     style: { color: 'red' }
   }, [
-      new Vnode('li', { id: 'newTree-child-1', }, ['newTree-li-1']),
-      new Vnode('li', { id: 'newTree-child-2', }, ['newTree-li-2']),
-      new Vnode('li', { id: 'newTree-child-2', }, ['newTree-li-3']),
+      new Vnode('li', { id: 'newTree-child-1', }, [new Vnode(undefined, undefined, [], 'newTree-li-1')]),
+      new Vnode('li', { id: 'newTree-child-2', }, [new Vnode(undefined, undefined, [], 'newTree-li-2')]),
+      new Vnode('li', { id: 'newTree-child-2', }, [new Vnode(undefined, undefined, [], 'newTree-li-3')]),
     ]
   )
 
   const oldTreeEl = oldTree.render()//真实节点
   document.getElementById('app').appendChild(oldTreeEl)
-  const res = patch(oldTree, newTree, oldTreeEl)
-
+  setTimeout(() => {
+    const res = patch(oldTree, newTree, oldTreeEl)
+  }, 2000);
 
   console.log('oldTreeEl.vnode 的值是：', oldTreeEl.vnode);
 
