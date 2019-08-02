@@ -9,6 +9,7 @@
  </div>
 ```
 其实仔细思考下，一个dom节点主要包含三个部分
+
 1. 自身的标签名（div）
 2. 自身的属性（id='app'）
 3. 子节点(span)
@@ -34,6 +35,7 @@ const vnode2 = {
 > diff算法的本质是用来找出两个对象之间的差异
 
 那么我们运行 diff (vnode,vnode2),就能知道 vnode 和 vnode2 之间的差异如下：
+
 - div 的 id 改为 app2
 - span 的文本子节点 1 改为 2
 
@@ -55,6 +57,7 @@ function diff(vnode,newVnode){
 }
 ``` 
 >vue之前的源码是采用 先 diff，得到差异，然后根据差异在去 patch 真实 dom，也就是分两步骤
+
 1. diff
 2. patch
 
@@ -124,12 +127,13 @@ function setAttr(node, key, value) {
 }
 ```
 > 该函数主要做了两件事
+
 1. 遍历  oldVnode 看 newTreeAttr 是否还有对应的属性
    - 如果有并且不相等的，修改对应的属性， 
    - 没有的话，直接删除对应的属性
 2. 遍历oldVnode, 是否还有对应的属性，没有就新增 
 
-## diffChildren
+## patchChildren
 先看下源码
 ```js
 function patchChildren(parentElm, oldCh, newCh) {
@@ -255,6 +259,7 @@ if (sameVnode(oldStartVnode, newStartVnode)) {
       newStartVnode = newCh[++newStartIdx];
     }
 ```
+
 2. 旧尾 和 新尾 对比
 ``` js
 if (sameVnode(oldEndVnode, newEndVnode)) { //旧尾 和 新尾相同
@@ -263,6 +268,7 @@ if (sameVnode(oldEndVnode, newEndVnode)) { //旧尾 和 新尾相同
       newEndVnode = newCh[--newEndIdx];
     }
 ```
+
 3. 旧首 和 新尾 对比
 ```js
 if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首移动到 最后面
@@ -282,8 +288,9 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
       newStartVnode = newCh[++newStartIdx];
     }
 ```
+
 5. 首尾对比 都不 符合 sameVnode 的话
-   -  尝试 用 newCh 的第一项在 oldCh 内寻找 sameVnode,如果在 oldCh 不存在对应的 sameVnode ，则直接创建一个，存在的话则判断
+   - 尝试 用 newCh 的第一项在 oldCh 内寻找 sameVnode,如果在 oldCh 不存在对应的 sameVnode ，则直接创建一个，存在的话则判断
       - 符合 sameVnode，则移动  oldCh 对应的 节点
       - 不符合 sameVnode ,创建新节点
 
