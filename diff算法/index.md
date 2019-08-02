@@ -298,4 +298,4 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
     - 决定节点是否可以复用
     - 建立key-index的索引,主要是替代遍历，提升性能 
 
-## [源码]()
+## [源码](https://github.com/Leeesin/wheels/tree/master/diff%E7%AE%97%E6%B3%95)
