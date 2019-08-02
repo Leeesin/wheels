@@ -13,7 +13,7 @@ function patchVnode(parentElm, oldVnode, vnode) {
     if (!vnode.children.length) {//移除  所有子节点
       nodeOps.removeChildren(oldVnode)
     } else {
-      updateChildren(parentElm, oldVnode.children, vnode.children)
+      patchChildren(parentElm, oldVnode.children, vnode.children)
     }
 
   } else {//旧树没有子节点,
@@ -25,7 +25,7 @@ function patchVnode(parentElm, oldVnode, vnode) {
   return parentElm
 }
 
-function updateChildren(parentElm, oldCh, newCh) {
+function patchChildren(parentElm, oldCh, newCh) {
   let oldStartIdx = 0;
   let oldEndIdx = oldCh.length - 1;
   let oldStartVnode = oldCh[0];
