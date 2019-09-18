@@ -61,4 +61,3 @@ var Interpreter = /** @class */ (function () {
     return Interpreter;
 }());
 exports.Interpreter = Interpreter;
-var res = new Token('', 1);

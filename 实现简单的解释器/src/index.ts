@@ -70,4 +70,3 @@ export class Interpreter {
   }
 }
 
-const res = new Token('', 1) 
