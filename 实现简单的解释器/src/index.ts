@@ -1,6 +1,7 @@
 const INTEGER = 'INTEGER'
 const PLUS = 'PLUS'
 const EOF = 'EOF'
+const EOF2 = 'EOF'
 
 class Token {
   type: string

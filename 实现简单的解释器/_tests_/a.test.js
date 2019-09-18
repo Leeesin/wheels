@@ -1,4 +1,4 @@
-import { Interpreter } from '../src'
+import { Interpreter } from '../dist/src'
 
 describe('Unit test', () => {
   it('Interpreter run success', () => {
