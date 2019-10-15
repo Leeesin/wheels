@@ -4,7 +4,7 @@ const createStore = function (initState) {
 
   /*订阅*/
   function subscribe(listener) {
-    listeners.push(listener);
+     listeners.push(listener);
   }
 
   function changeState(newState) {
