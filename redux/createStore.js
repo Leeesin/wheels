@@ -8,7 +8,7 @@ const createStore = function (initState) {
   }
 
   function changeState(newState) {
-      state = newState;
+       state = newState;
     /*通知*/
     for (let i = 0; i < listeners.length; i++) {
       const listener = listeners[i];
