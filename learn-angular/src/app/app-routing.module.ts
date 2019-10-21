@@ -5,8 +5,14 @@ import { Demo2Component } from './demo2/demo2.component';
 
 
 const appRoutes: Routes = [
-  { path: 'DemoComponent', component: DemoComponent },
-  { path: 'DemoComponent2', component: Demo2Component },
+  {
+    path: 'DemoComponent',
+    component: DemoComponent,
+    data: {
+      keepAlive: true
+    },
+  },
+{ path: 'DemoComponent2', component : Demo2Component },
 ];
 
 

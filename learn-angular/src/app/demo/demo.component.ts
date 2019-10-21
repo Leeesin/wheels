@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import { NavigationEnd, NavigationStart, Event, Router, ActivatedRoute } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -9,10 +10,19 @@ import {NavigationEnd, Router} from '@angular/router';
 })
 export class DemoComponent implements OnInit {
 
-  constructor(private router: Router) { }
-
-  ngOnInit() {
-    alert('demo');
+  constructor(private router: Router, active: ActivatedRoute) {
+    router.events.pipe(
+      filter((e: Event) => (e instanceof NavigationStart)),
+    ).subscribe((e: NavigationStart) => {
+      console.log('e.url 的值是：', e);
+      console.log('this 的值是：', this);
+      this.ngOnActive();
+    });
   }
 
+  ngOnInit() {
+  }
+  ngOnActive() {
+    alert('demo1');
+  }
 }
