@@ -1,0 +1,27 @@
+<div class="app-card active">
+   <div class="app-card-item"
+        [ngClass]='{"active":currentActiveIndex===i}'
+        *ngFor='let item of dataSource;index as i'
+        (mouseenter)="onChange(i)">
+      <img class="app-card-item-banner"
+           [src]="item.imgUrl"
+           alt="">
+      <div class="app-card-item-label">厂家售后推荐</div>
+
+      <ng-container [ngSwitch]="item.leadType">
+         <div class="app-card-item-main"
+              *ngSwitchCase="EMERGENCY.value">
+            <div class="app-card-item-main-item">
+               <div class="app-card-item-main-item-label">报警类型</div>
+               <div class="app-card-item-main-item-value">{{displayEmergencyMessage(item.emergencyMessages)}}</div>
+            </div>
+         </div>
+      </ng-container>
+
+
+
+
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Enim cum at corrupti eligendi qui impedit quibusdam nemo
+      possimus veniam? Placeat necessitatibus incidunt tempore recusandae facilis quasi sequi adipisci quas molestiae?
+   </div>
+</div>

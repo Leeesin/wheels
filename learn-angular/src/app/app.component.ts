@@ -1,8 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
+import { Router, ActivatedRoute } from '@angular/router';
+import cardJson from './mock/card';
 
 @Component({
   selector: 'app-root',
@@ -11,21 +9,14 @@ import 'rxjs/add/operator/mergeMap';
 })
 export class AppComponent implements OnInit {
   title = 'my-app';
+  cardJson = cardJson;
   constructor(public router: Router, public activatedRoute: ActivatedRoute, ) {
 
   }
 
   ngOnInit() {
-    this.router.events
-      .filter(event => event instanceof NavigationEnd)
-      .map(() => this.activatedRoute)
-      .map(route => {
-        while (route.firstChild) { route = route.firstChild; }
-        return route;
-      })
-      .filter(route => route.outlet === 'primary')
-      .mergeMap(route => route.data)
-      .subscribe((event) => {});
+
+
   }
 
 }
