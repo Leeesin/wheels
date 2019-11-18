@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { validateComponentInput } from '../../validate-component-input';
 import * as _ from 'lodash';
 
 enum EMERGENCY {
@@ -14,6 +15,10 @@ enum EMERGENCY {
 })
 export class CardComponent implements OnInit {
   @Input() dataSource: Array<any>;
+
+  @validateComponentInput((value) => value === 1)
+  @Input()
+  testNumber = 1;
 
   currentActiveIndex = 0;
   EMERGENCY = EMERGENCY;
