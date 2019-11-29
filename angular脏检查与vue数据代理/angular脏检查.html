@@ -70,17 +70,23 @@
         }
       }
     }
+
+    $render() { 
+      
+    }
   }
+
 
   window.onload = function () {
     console.log(222);
 
-    var $scope = new Component();
-    $scope.count = 0;
-    $scope.increment = function () {
-      this.count++;
-    };
-
+    class HelloWorld extends Component {
+      count = 0
+      increment() {
+        this.count++;
+      }
+    }
+    var $scope = new HelloWorld()
     //解析ng指令
     var bindList = document.querySelectorAll("[ng-click]");
     for (var i = 0; i < bindList.length; i++) {
