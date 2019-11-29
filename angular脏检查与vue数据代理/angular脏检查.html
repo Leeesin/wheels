@@ -37,6 +37,14 @@
       })
     }
 
+    timeout(fn, wait) {
+      setTimeout(() => {
+        fn()
+        this.digest()
+      }, wait);
+    }
+
+
     digest() {
       let bindList = document.querySelectorAll("[ng-bind]");      //获取所有含ng-bind的DOM节点
       let dirty = true;
@@ -107,7 +115,9 @@
   class HelloWorld extends Component {
     count = 0
     increment() {
-      this.count++;
+      this.timeout(() => {
+        this.count++
+      }, 1000)
     }
   }
   let helloWorld = new HelloWorld()
