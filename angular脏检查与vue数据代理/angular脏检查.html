@@ -95,14 +95,9 @@
       //绑定数据
       for (let key in ctx) {
         if (key != "$$watchers" && typeof ctx[key] != "function") {            //非函数数据才进行绑定
-          ctx.watch(key, (function (index) {
-            return function () {
-              return ctx[index];
-            }
-          })(key))
+          ctx.watch(key, () => ctx[key])
         }
       }
-
       this.digest();
     }
   }
