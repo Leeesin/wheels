@@ -28,9 +28,15 @@
   class HelloWorld extends Component {
     count = 0
     increment() {
-      this.timeout(() => {
+      for (let i = 0; i < 100; i++) {
+        console.log('1111');
+        
         this.count++
-      }, 1000)
+      }
+
+      // this.timeout(() => {
+      //   this.count++
+      // }, 1000)
     }
   }
   let helloWorld = new HelloWorld()

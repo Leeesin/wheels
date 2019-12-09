@@ -1,6 +1,19 @@
 class Component {
   constructor() {
+    // this.patch()
     this.$$watchers = [];         //监听器
+  }
+
+  patch() {
+    const setTimeoutCopy = setTimeout
+    window.setTimeout = (fn, wait) => {
+      let fn2 = () => {
+        fn()
+        this.update()
+      }
+      console.log('this.setTimeoutCopy 的值是：', this.setTimeoutCopy);
+      setTimeoutCopy(fn2, wait)
+    }
   }
 
   watch(name, exp, listener) {
@@ -15,12 +28,13 @@ class Component {
   timeout(fn, wait) {
     setTimeout(() => {
       fn()
-      this.digest()
+      this.update()
     }, wait);
   }
 
 
-  digest() {
+  update() {
+    console.log('update');
     let bindList = document.querySelectorAll("[ng-bind]");      //获取所有含ng-bind的DOM节点
     let dirty = true;
     while (dirty) {
@@ -61,7 +75,7 @@ class Component {
       bindList[i].addEventListener('click', (function (index) {
         return function () {
           ctx[bindList[index].getAttribute("ng-click")]();
-          ctx.digest();           //调用函数时触发digest
+          ctx.update();           //调用函数时触发update
         }
       })(i))
     }
@@ -71,7 +85,7 @@ class Component {
       inputList[i].addEventListener("input", (function (index) {
         return function () {
           ctx[inputList[index].getAttribute("ng-bind")] = inputList[index].value;
-          ctx.digest();           //调用函数时触发digest
+          ctx.update();           //调用函数时触发update
         }
       })(i));
     }
@@ -82,7 +96,7 @@ class Component {
         ctx.watch(key, () => ctx[key])
       }
     }
-    this.digest();
+    this.update();
   }
 }
 
