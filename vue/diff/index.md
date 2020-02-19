@@ -145,6 +145,7 @@ function setAttr(node, key, value) {
 1. 遍历  oldVnode 看 newTreeAttr 是否还有对应的属性
    - 如果有并且不相等的，修改对应的属性， 
    - 没有的话，直接删除对应的属性
+
 2. 遍历oldVnode, 是否还有对应的属性，没有就新增 
 
 ## patchChildren （对节点的子节点进行 ’修补‘）
