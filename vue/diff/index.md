@@ -1,4 +1,4 @@
-## 前言
+# 前言
 
 - 该 diff 算法解析的是 vue2.x版本，vue3.x 目前 alpha 阶段
 - 3.x 版本的 diff 与 2.x 有区别，但大致思路差不多。主要是增加了一些优化，区分动态节点和静态节点，从而使影响 diff 性能的因素从`节点数量` 变成 `动态节点数量`
@@ -299,7 +299,7 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
     }
 ```
 
-5. 首尾对比 都不 符合 sameVnode 的话
+5. 首尾对比都不符合 sameVnode 的话
    - 尝试 用 newCh 的第一项在 oldCh 内寻找 sameVnode,如果在 oldCh 不存在对应的 sameVnode ，则直接创建一个，存在的话则判断
       - 符合 sameVnode，则移动  oldCh 对应的 节点
       - 不符合 sameVnode ,创建新节点
@@ -309,12 +309,10 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
    - newCh 先遍历完成,则证明 oldCh 还有多余节点，需要`删除`这些节点
 
 ## 总结
-- diff 算法的本质是`找出两个 JS 对象之间的差异,然后通过差异去修改dom节点，更新视图`
+- diff 算法的本质是`找出两个JS对象之间的差异,然后通过差异去修改dom节点，更新视图`
 - diff 算法的核心是`子节点数组对比`,思路是通过 `首尾两端对比`
 - key 的作用 主要是
     - 决定节点是否可以复用
-    - 建立key-index的索引,主要是替代遍历，提升性能 
+    - 在子节点首尾对比都不符合 sameVnode 的情况下,建立key-index的索引,主要是替代遍历，提升性能 
 
 ## [源码](https://github.com/qinjialei1023/wheels/blob/master/vue/diff/patch.js)
-
-> diff算法的本质是用来找出两个JS对象之间的差异,然后通过差异去修改dom节点，更新视图
