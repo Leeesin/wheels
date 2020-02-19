@@ -38,7 +38,6 @@ const vnode2 = {
 上文说了这个结论,再看下
 > diff算法的本质是找出两个 JS 对象之间的差异,然后通过差异去修改dom节点，更新视图
 
-
 那么我们运行 diff (vnode,vnode2),就能知道 vnode 和 vnode2 之间的差异如下：
 
 - div 的 id 改为 app2
@@ -315,11 +314,14 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
 ```
 
 首尾对比都不符合 sameVnode 的话
-   - 尝试 用 newCh 的第一项在 oldCh 内寻找 sameVnode,如果在 oldCh 不存在对应的 sameVnode ，则直接创建一个，存在的话则判断
-      - 符合 sameVnode，则移动  oldCh 对应的 节点
-      - 不符合 sameVnode ,创建新节点
+
+尝试 用 newCh 的第一项在 oldCh 内寻找 sameVnode,如果在 oldCh 不存在对应的 sameVnode,则直接创建一个，存在的话则判断
+
+- 符合 sameVnode，则移动  oldCh 对应的 节点
+- 不符合 sameVnode ,创建新节点
 
 通过 oldStartIdx > oldEndIdx ，来判断 oldCh 和  newCh 哪一个先遍历完成
+
    - oldCh 先遍历完成,则证明 newCh 还有多余节点，需要`新增`这些节点
    - newCh 先遍历完成,则证明 oldCh 还有多余节点，需要`删除`这些节点
 
