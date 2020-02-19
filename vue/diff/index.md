@@ -1,6 +1,6 @@
 # 前言
 
-- 该 diff 算法解析的是 vue2.x版本，vue3.x 目前 alpha 阶段
+- 该 diff 算法解析的是 vue2.x版本，vue3.x 目前处于 alpha 阶段
 - 3.x 版本的 diff 与 2.x 有区别，但大致思路差不多。主要是增加了一些优化，区分动态节点和静态节点，从而使影响 diff 性能的因素从`节点数量` 变成 `动态节点数量`
 
 # 首先我们先整明白 diff 算法的本质
@@ -61,10 +61,16 @@ function diff(vnode,newVnode){
   diffChildren(vnode.children,newVnode.children)
 }
 ``` 
->vue有一个老版本的源码是采用 先 diff，得到差异，然后根据差异在去 patch 真实 dom，也就是分两步骤
+>vue有一个老版本的源码是采用 先 diff，得到差异，然后根据差异在去 patch 真实 dom，也就是分两个步骤
 
 1. diff（找到差异部分）
 2. patch（patch 意为’修补‘，即将 diff 得到的差异部分 ’修补‘ 到 视图（dom 树）上）
+
+伪代码
+```js
+ const patches = diff(vnode,newVnode)// 返回 差异
+ patch(patches) // 基于差异’修补‘视图
+```
 
 但是这样性能会有损失,因为 diff 过程中会遍历一次整棵树，patch 的时候又会遍历整棵树
 
@@ -267,7 +273,7 @@ function createKeyToOldIdx(children, beginIdx, endIdx) {
 }
 ```
 
-1. 旧首 和 新首 对比
+旧首 和 新首 对比
 
 ```js
 if (sameVnode(oldStartVnode, newStartVnode)) { 
@@ -277,7 +283,7 @@ if (sameVnode(oldStartVnode, newStartVnode)) {
     }
 ```
 
-2. 旧尾 和 新尾 对比
+旧尾 和 新尾 对比
 
 ``` js
 if (sameVnode(oldEndVnode, newEndVnode)) { //旧尾 和 新尾相同
@@ -287,7 +293,7 @@ if (sameVnode(oldEndVnode, newEndVnode)) { //旧尾 和 新尾相同
     }
 ```
 
-3. 旧首 和 新尾 对比
+旧首 和 新尾 对比
 
 ```js
 if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首移动到 最后面
@@ -297,8 +303,7 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
       newEndVnode = newCh[--newEndIdx];
     }
 ```
-
-4. 旧尾 和 新首 对比,将 旧尾 移动到 最前面
+旧尾 和 新首 对比,将 旧尾 移动到 最前面
 
 ```js
  if (sameVnode(oldEndVnode, newStartVnode)) {//旧尾 和 新首相同 ,将 旧尾 移动到 最前面
@@ -309,13 +314,12 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
     }
 ```
 
-5. 首尾对比都不符合 sameVnode 的话
-
+首尾对比都不符合 sameVnode 的话
    - 尝试 用 newCh 的第一项在 oldCh 内寻找 sameVnode,如果在 oldCh 不存在对应的 sameVnode ，则直接创建一个，存在的话则判断
       - 符合 sameVnode，则移动  oldCh 对应的 节点
       - 不符合 sameVnode ,创建新节点
 
-6. 通过 oldStartIdx > oldEndIdx ，来判断 oldCh 和  newCh 哪一个先遍历完成
+通过 oldStartIdx > oldEndIdx ，来判断 oldCh 和  newCh 哪一个先遍历完成
    - oldCh 先遍历完成,则证明 newCh 还有多余节点，需要`新增`这些节点
    - newCh 先遍历完成,则证明 oldCh 还有多余节点，需要`删除`这些节点
 
