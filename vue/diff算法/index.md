@@ -1,6 +1,6 @@
-# 解析 vue2 diff 算法
+# 一看就懂的 Vue2.x diff 算法
 ## 首先我们先整明白 diff 算法的本质
-> diff算法的本质是用来找出两个对象之间的差异
+> diff算法的本质是用来找出两个JS对象之间的差异,然后通过差异去修改dom节点，更新视图
 
 此处说到的对象其实就对应 vue中的 virtual dom,即使用 js 对象来表示页面中的 dom 结构。
 ``` html
@@ -56,21 +56,25 @@ function diff(vnode,newVnode){
   diffChildren(vnode.children,newVnode.children)
 }
 ``` 
->vue之前的源码是采用 先 diff，得到差异，然后根据差异在去 patch 真实 dom，也就是分两步骤
+>vue有一个老版本的源码是采用 先 diff，得到差异，然后根据差异在去 patch 真实 dom，也就是分两步骤
 
-1. diff
-2. patch
+1. diff（找到差异部分）
+2. patch（patch 意为’修补‘，即将 diff 得到的差异部分 ’修补‘ 到 视图（dom 树）上）
 
-但是这样性能会有损失,因为 diff 过程中会遍历一次整棵树，patch 的时候又会遍历整棵树,其实这两次遍历可以合并成一次，也就是 `在diff的同时进行patch`
+但是这样性能会有损失,因为 diff 过程中会遍历一次整棵树，patch 的时候又会遍历整棵树
+
+其实这两次遍历可以合并成一次，最新版本改成了`在diff的同时进行patch`
 
 所以我们把流程改为
 ```js
 function patchVnode(oldVnode, vnode, parentElm){
+  //（对节点自身属性进行 ’修补‘）
   patchAttr(oldVnode.attr, vnode.attr, parentElm)
+  //（对节点的子节点进行 ’修补‘）
   patchChildren(parentElm, oldVnode.children, vnode.children)
 }
 ```
-## patchAttr
+## patchAttr （对节点自身属性进行 ’修补‘）
 ```js
 function patchAttr(oldVnode = {}, vnode = {}, parentElm) {
   each(oldVnode, (key, val) => { //遍历  oldVnode 看newTreeAttr 是否还有对应的属性
@@ -133,7 +137,7 @@ function setAttr(node, key, value) {
    - 没有的话，直接删除对应的属性
 2. 遍历oldVnode, 是否还有对应的属性，没有就新增 
 
-## patchChildren
+## patchChildren （对节点的子节点进行 ’修补‘）
 先看下源码
 ```js
 function patchChildren(parentElm, oldCh, newCh) {
@@ -232,13 +236,15 @@ function patchChildren(parentElm, oldCh, newCh) {
 - 新尾（新数组的最后一个元素）
 
 一些工具函数
-- sameVnode--用于判断节点是否应该复用,这里做了一些简化，实际的diff算法复杂些，这里只用tag 和 key 相同，我们就复用节点，执行patchVnode，即对节点进行修改
+- sameVnode
+> 用于判断节点是否应该复用,这里做了一些简化，实际的diff算法复杂些，这里只判断 tag 和 key 相同，我们就复用节点，执行 patchVnode，即对节点进行 ’修补‘
 ```js
 function sameVnode(a, b) {
   return a.key === b.key && a.tag === b.tag
 }
 ```
-- createKeyToOldIdx--建立key-index的索引,主要是替代遍历，提升性能 
+- createKeyToOldIdx
+>建立key-index的索引,主要是替代遍历，提升性能 
 ```js
 function createKeyToOldIdx(children, beginIdx, endIdx) {
   let i, key
@@ -305,4 +311,4 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
     - 决定节点是否可以复用
     - 建立key-index的索引,主要是替代遍历，提升性能 
 
-## [源码](https://github.com/Leeesin/wheels/tree/master/diff%E7%AE%97%E6%B3%95)
+## [源码](https://github.com/qinjialei1023/wheels/blob/master/vue/diff%E7%AE%97%E6%B3%95/patch.js)
