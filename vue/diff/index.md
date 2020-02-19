@@ -36,7 +36,8 @@ const vnode2 = {
 } 
 ```
 上文说了这个结论,再看下
-> diff算法的本质是用来找出两个对象之间的差异
+> diff算法的本质是找出两个 JS 对象之间的差异,然后通过差异去修改dom节点，更新视图
+
 
 那么我们运行 diff (vnode,vnode2),就能知道 vnode 和 vnode2 之间的差异如下：
 
@@ -53,7 +54,7 @@ document.getElementById("child").firstChild.textContent ='2' //1 改为 2
 - 自身的属性（style 、class等等）
 - 子节点
   
-那么 diff 算法可以抽象为 两部分
+那么 diff 算法可以抽象为 两个部分
 ```js
 function diff(vnode,newVnode){
   diffAttr(vnode.attr,newVnode.attr)
@@ -234,20 +235,25 @@ function patchChildren(parentElm, oldCh, newCh) {
 
 怎么找出新旧数组之间的差异呢？
 我们约定以下名词
+
 - 旧首（旧数组的第一个元素）
 - 旧尾（旧数组的最后一个元素）
 - 新首（新数组的第一个元素）
 - 新尾（新数组的最后一个元素）
 
 一些工具函数
+
 - sameVnode
+
 > 用于判断节点是否应该复用,这里做了一些简化，实际的diff算法复杂些，这里只判断 tag 和 key 相同，我们就复用节点，执行 patchVnode，即对节点进行 ’修补‘
 ```js
 function sameVnode(a, b) {
   return a.key === b.key && a.tag === b.tag
 }
 ```
+
 - createKeyToOldIdx
+
 >建立key-index的索引,主要是替代遍历，提升性能 
 ```js
 function createKeyToOldIdx(children, beginIdx, endIdx) {
@@ -262,6 +268,7 @@ function createKeyToOldIdx(children, beginIdx, endIdx) {
 ```
 
 1. 旧首 和 新首 对比
+
 ```js
 if (sameVnode(oldStartVnode, newStartVnode)) { 
       patchVnode(oldStartVnode.elm, oldStartVnode, newStartVnode);
@@ -271,6 +278,7 @@ if (sameVnode(oldStartVnode, newStartVnode)) {
 ```
 
 2. 旧尾 和 新尾 对比
+
 ``` js
 if (sameVnode(oldEndVnode, newEndVnode)) { //旧尾 和 新尾相同
       patchVnode(oldEndVnode.elm, oldEndVnode, newEndVnode);
@@ -280,6 +288,7 @@ if (sameVnode(oldEndVnode, newEndVnode)) { //旧尾 和 新尾相同
 ```
 
 3. 旧首 和 新尾 对比
+
 ```js
 if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首移动到 最后面
       patchVnode(oldStartVnode.elm, oldStartVnode, newEndVnode);
@@ -290,6 +299,7 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
 ```
 
 4. 旧尾 和 新首 对比,将 旧尾 移动到 最前面
+
 ```js
  if (sameVnode(oldEndVnode, newStartVnode)) {//旧尾 和 新首相同 ,将 旧尾 移动到 最前面
       patchVnode(oldEndVnode.elm, oldEndVnode, newStartVnode);
@@ -300,6 +310,7 @@ if (sameVnode(oldStartVnode, newEndVnode)) { //旧首 和 新尾相同,将旧首
 ```
 
 5. 首尾对比都不符合 sameVnode 的话
+
    - 尝试 用 newCh 的第一项在 oldCh 内寻找 sameVnode,如果在 oldCh 不存在对应的 sameVnode ，则直接创建一个，存在的话则判断
       - 符合 sameVnode，则移动  oldCh 对应的 节点
       - 不符合 sameVnode ,创建新节点
